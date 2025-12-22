@@ -4,7 +4,191 @@
   </nb-card-header>
 
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
-    </ng2-smart-table>
+    <div class="table-actions">
+      <button nbButton status="primary" size="small" (click)="onAddNew()">
+        <nb-icon icon="plus-outline"></nb-icon>
+      </button>
+    </div>
+    
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Actions</th>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+          <th>E-mail</th>
+          <th>Age</th>
+        </tr>
+        <tr class="filter-row">
+          <th></th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.id" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search ID" 
+              class="filter-input">
+          </th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.firstName" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search First Name" 
+              class="filter-input">
+          </th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.lastName" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search Last Name" 
+              class="filter-input">
+          </th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.username" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search Username" 
+              class="filter-input">
+          </th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.email" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search E-mail" 
+              class="filter-input">
+          </th>
+          <th>
+            <input 
+              nbInput 
+              type="text" 
+              [(ngModel)]="filters.age" 
+              (ngModelChange)="onFilterChange()"
+              placeholder="Search Age" 
+              class="filter-input">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="editingRow && editingRow.id === 0">
+          <td>
+            <button nbButton status="success" size="tiny" (click)="onSaveNew()">
+              <nb-icon icon="checkmark-outline"></nb-icon>
+            </button>
+            <button nbButton status="danger" size="tiny" (click)="onCancelEdit()">
+              <nb-icon icon="close-outline"></nb-icon>
+            </button>
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.id" placeholder="ID" class="form-control">
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.firstName" placeholder="First Name" class="form-control">
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.lastName" placeholder="Last Name" class="form-control">
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.username" placeholder="Username" class="form-control">
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.email" placeholder="E-mail" class="form-control">
+          </td>
+          <td>
+            <input nbInput type="text" [(ngModel)]="editingRow.age" placeholder="Age" class="form-control">
+          </td>
+        </tr>
+        <tr *ngFor="let item of displayedData">
+          <td>
+            <ng-container *ngIf="editingRow?.id !== item.id">
+              <button nbButton status="info" size="tiny" (click)="onEdit(item)">
+                <nb-icon icon="edit-outline"></nb-icon>
+              </button>
+              <button nbButton status="danger" size="tiny" (click)="onDelete(item)">
+                <nb-icon icon="trash-2-outline"></nb-icon>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="editingRow?.id === item.id">
+              <button nbButton status="success" size="tiny" (click)="onSaveEdit()">
+                <nb-icon icon="checkmark-outline"></nb-icon>
+              </button>
+              <button nbButton status="danger" size="tiny" (click)="onCancelEdit()">
+                <nb-icon icon="close-outline"></nb-icon>
+              </button>
+            </ng-container>
+          </td>
+          <td *ngIf="editingRow?.id !== item.id">{{ item.id }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.id" class="form-control">
+          </td>
+          
+          <td *ngIf="editingRow?.id !== item.id">{{ item.firstName }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.firstName" class="form-control">
+          </td>
+          
+          <td *ngIf="editingRow?.id !== item.id">{{ item.lastName }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.lastName" class="form-control">
+          </td>
+          
+          <td *ngIf="editingRow?.id !== item.id">{{ item.username }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.username" class="form-control">
+          </td>
+          
+          <td *ngIf="editingRow?.id !== item.id">{{ item.email }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.email" class="form-control">
+          </td>
+          
+          <td *ngIf="editingRow?.id !== item.id">{{ item.age }}</td>
+          <td *ngIf="editingRow?.id === item.id">
+            <input nbInput type="text" [(ngModel)]="editingRow.age" class="form-control">
+          </td>
+        </tr>
+        <tr *ngIf="displayedData.length === 0" class="no-data-row">
+          <td colspan="7" class="no-data-cell">
+            <div class="no-data-message">
+              <nb-icon icon="alert-circle-outline" class="no-data-icon"></nb-icon>
+              <span>No data found</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination-container" *ngIf="totalItems > 0">
+      <div class="pagination-info">
+        Showing {{ startItem }} to {{ endItem }} of {{ totalItems }} entries
+        <span *ngIf="totalItems !== data.length"> (filtered from {{ data.length }} total entries)</span>
+      </div>
+      <div class="pagination-controls">
+        <button nbButton size="small" status="basic" [disabled]="currentPage === 1" (click)="previousPage()">
+          <nb-icon icon="arrow-back-outline"></nb-icon>
+        </button>
+        <button 
+          *ngFor="let pageNum of pageNumbers" 
+          nbButton 
+          size="small" 
+          [status]="pageNum === currentPage ? 'primary' : 'basic'"
+          (click)="goToPage(pageNum)">
+          {{ pageNum }}
+        </button>
+        <button nbButton size="small" status="basic" [disabled]="currentPage === totalPages" (click)="nextPage()">
+          <nb-icon icon="arrow-forward-outline"></nb-icon>
+        </button>
+      </div>
+    </div>
   </nb-card-body>
 </nb-card>
