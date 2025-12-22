@@ -64,10 +64,10 @@ export default defineConfig<TestOptions>({
     }
   ],
 
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:4201/',
-  //   timeout: 120000,  // 2 хвилини для Docker (Angular довго компілюється)
-  //   reuseExistingServer: !process.env.CI
-  // }
+  webServer: {
+    command: 'npm run start',
+    url: 'http://localhost:4201/',
+    timeout: 120000,  // 2 хвилини для Docker (Angular довго компілюється)
+    reuseExistingServer: !process.env.CI
+  }
 });
