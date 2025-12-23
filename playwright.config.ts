@@ -20,11 +20,8 @@ export default defineConfig<TestOptions>({
     [
       "@argos-ci/playwright/reporter",
       {
-        // Upload to Argos on CI only.
         uploadToArgos: !!process.env.CI,
-
-        // Set your Argos token (required if not using GitHub Actions).
-        token: "<YOUR-ARGOS-TOKEN>",
+        token: process.env.ARGOS_TOKEN,
       },
     ],
     ['json', {outputFile: 'test-results/jsonReporter.json'}],
@@ -77,10 +74,10 @@ export default defineConfig<TestOptions>({
     }
   ],
 
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:4201/',
-  //   timeout: 120000,  // 2 хвилини для Docker (Angular довго компілюється)
-  //   reuseExistingServer: !process.env.CI
-  // }
+  webServer: {
+    command: 'npm run start',
+    url: 'http://localhost:4201/',
+    timeout: 180000,  // 3 хвилини для CI (Angular довго компілюється)
+    reuseExistingServer: !process.env.CI
+  }
 });

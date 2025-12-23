@@ -36,6 +36,9 @@ jobs:
 
       - name: Run Playwright tests
         run: node node_modules/@playwright/test/cli.js test usePageObjects.spec.ts --project=chromium
+        env:
+          CI: true
+          ARGOS_TOKEN: ${{ secrets.ARGOS_TOKEN }}
 
       - name: Upload Playwright report
         if: always()
