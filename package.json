@@ -9,15 +9,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4201",
-    "pageObjects-chrome": "npx playwright test usePageObjects.spec.ts --project=chromium",
-    "pageObjects-chrome:allure": "npx playwright test usePageObjects.spec.ts --project=chromium && npm run allure:generate && npm run allure:open",
-    "pageObjects-firefox": "npx playwright test usePageObjects.spec.ts --project=firefox",
-    "pageObjects-firefox:allure": "npx playwright test usePageObjects.spec.ts --project=firefox && npm run allure:generate && npm run allure:open",
+    "pageObjects-chrome": "playwright test usePageObjects.spec.ts --project=chromium",
+    "pageObjects-chrome:allure": "playwright test usePageObjects.spec.ts --project=chromium && npm run allure:generate && npm run allure:open",
+    "pageObjects-firefox": "playwright test usePageObjects.spec.ts --project=firefox",
+    "pageObjects-firefox:allure": "playwright test usePageObjects.spec.ts --project=firefox && npm run allure:generate && npm run allure:open",
     "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox",
-    "test": "npx playwright test",
-    "test:allure": "npx playwright test && npx allure generate allure-results --clean && npx allure open",
-    "allure:generate": "npx allure generate allure-results --clean",
-    "allure:open": "npx allure open"
+    "test": "playwright test",
+    "test:allure": "playwright test && allure generate allure-results --clean && allure open",
+    "allure:generate": "allure generate allure-results --clean",
+    "allure:open": "allure open"
   },
   "overrides": {
     "stylus": "github:stylus/stylus#0.54.5"
@@ -70,6 +70,7 @@
     "@angular/cli": "^16.2.16",
     "@angular/compiler-cli": "^16.2.12",
     "@angular/language-service": "^16.2.12",
+    "@argos-ci/playwright": "^6.3.8",
     "@compodoc/compodoc": "^1.1.26",
     "@faker-js/faker": "^10.1.0",
     "@fortawesome/fontawesome-free": "^6.7.1",

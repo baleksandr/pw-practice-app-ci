@@ -16,6 +16,14 @@ export default defineConfig<TestOptions>({
   fullyParallel: false,
   retries: 1,
   reporter: [
+    process.env.CI ? ["dot"] : ["list"],
+    [
+      "@argos-ci/playwright/reporter",
+      {
+        uploadToArgos: !!process.env.CI,
+        token: process.env.ARGOS_TOKEN,
+      },
+    ],
     ['json', {outputFile: 'test-results/jsonReporter.json'}],
     ['junit', {outputFile: 'test-results/junit.xml'}],
     // ['allure-playwright'],
@@ -23,13 +31,15 @@ export default defineConfig<TestOptions>({
   ],
 
   use: {
+    trace: 'on-first-retry',
+    // Capture screenshot after each test failure.
+    screenshot: "only-on-failure",
     baseURL: 'http://localhost:4201/',
     globalsQaURL: 'https://www.globalsqa.com/demo-site/draganddrop/',
     // baseURL: process.env.DEV === '1' ? 'http://localhost:4201/' 
     //         : process.env.STAGING === '1' ? 'http://localhost:4202/'
     //         : 'http://localhost:4201/',
 
-    trace: 'on-first-retry',
     actionTimeout: 20000, //Default timeout for each Playwright action in milliseconds, defaults to 0 (no timeout).
     navigationTimeout: 25000, //Timeout for each navigation action in milliseconds. Defaults to 0 (no timeout).
     video: { //Whether to record video for each test. Defaults to 'off'
@@ -67,7 +77,7 @@ export default defineConfig<TestOptions>({
   webServer: {
     command: 'npm run start',
     url: 'http://localhost:4201/',
-    timeout: 120000,  // 2 хвилини для Docker (Angular довго компілюється)
+    timeout: 180000,  // 3 хвилини для CI (Angular довго компілюється)
     reuseExistingServer: !process.env.CI
   }
 });
