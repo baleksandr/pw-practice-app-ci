@@ -22,12 +22,20 @@ jobs:
 
       - name: Install dependencies
         run: npm install --force
+
+      - name: Install Playwright separately
+        run: npm install @playwright/test
+
+      - name: Verify Playwright installed
+        run: |
+          ls -la node_modules/.bin/ | grep playwright || echo "playwright not in bin"
+          cat node_modules/@playwright/test/package.json | head -5 || echo "package not found"
       
       - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
+        run: ./node_modules/.bin/playwright install chromium --with-deps
 
       - name: Run Playwright tests
-        run: npm run pageObjects-chrome
+        run: ./node_modules/.bin/playwright test usePageObjects.spec.ts --project=chromium
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
