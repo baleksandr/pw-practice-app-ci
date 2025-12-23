@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test'
 import {PageManager} from '..//page-objects/pageManager'
 import {faker} from '@faker-js/faker'
 import { log } from 'console';
+import { argosScreenshot } from "@argos-ci/playwright";
 //docker build -t pw-playwright-test . - збирає докер файли для подальшого запуску. всі конфіги 
 //docker run -it pw-playwright-test- запускає тест в докері 
 //docker-compose up --build - запуск композиції налаштунка докера - пересбере білд і сам запустить
@@ -45,5 +46,7 @@ test('parametrized methods @smoke' , async ({page}) => {
 test.only('testing with argos ci' , async ({page}) => {
     const pm = new PageManager(page)
     await pm.navigateTo().formLayoutsPage() //викликаємо метод з нашого об'єкта сторінки, використовуючи крапкову нотацію.
+    await argosScreenshot(page, "form Layouts Page");
     await pm.navigateTo().datePickerPage()
+    await argosScreenshot(page, "date Picker Page");
 })
