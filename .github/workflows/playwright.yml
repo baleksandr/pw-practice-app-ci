@@ -21,24 +21,26 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install --force
+        run: npm install --legacy-peer-deps
 
-      - name: Install Playwright separately
-        run: npm install @playwright/test --force
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./node_modules/@playwright/test/package.json').version)")" >> $GITHUB_ENV
 
-      - name: Verify Playwright installed
-        run: |
-          ls -la node_modules/.bin/ | grep playwright || echo "playwright not in bin"
-          cat node_modules/@playwright/test/package.json | head -5 || echo "package not found"
-      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+
       - name: Install Playwright Browsers
-        run: ./node_modules/.bin/playwright install chromium --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright tests
-        run: ./node_modules/.bin/playwright test usePageObjects.spec.ts --project=chromium
+        run: npx playwright test usePageObjects.spec.ts --project=chromium
 
       - name: Upload Playwright report
-        if: ${{ !cancelled() }}
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
