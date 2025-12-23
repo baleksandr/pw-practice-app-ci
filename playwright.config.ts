@@ -33,7 +33,7 @@ export default defineConfig<TestOptions>({
   use: {
     trace: 'on-first-retry',
     // Capture screenshot after each test failure.
-    screenshot: "only-on-failure",
+    screenshot: "on",
     baseURL: 'http://localhost:4201/',
     globalsQaURL: 'https://www.globalsqa.com/demo-site/draganddrop/',
     // baseURL: process.env.DEV === '1' ? 'http://localhost:4201/' 
